@@ -27,7 +27,7 @@ export const Route = createFileRoute("/")({
  * CONFIG — Replace these placeholders for production deployment
  * ============================================================ */
 // Get your Paystack public key from https://dashboard.paystack.com/#/settings/developers
-const PAYSTACK_PUBLIC_KEY = "pk_test_REPLACE_ME_WITH_YOUR_PAYSTACK_PUBLIC_KEY";
+const PAYSTACK_PUBLIC_KEY = "pk_test_pk_test_46bbad0f47e22e6ac2d09b110cddafdcbc7a1451";
 // Server endpoint that verifies the transaction reference & sends email receipts
 // (Paystack sends a basic receipt automatically when a customer email is provided;
 //  configure a webhook at /api/public/paystack-webhook to send branded receipts.)
