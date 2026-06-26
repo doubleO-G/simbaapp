@@ -203,7 +203,7 @@ function Header({ cartCount, onCart, onPartner, partnerUnlocked }: { cartCount: 
     <header className="sticky top-0 z-40 backdrop-blur-md bg-background/80 border-b border-border">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 h-16">
         <a href="#top" className="flex min-w-0 items-center gap-3">
-          <img src={blogoAsset.url} alt="Simba wa Yuda" className="h-10 w-10 shrink-0 rounded-full object-cover" width={40} height={40} />
+          <img src="/public/blogo.png" alt="Simba wa Yuda" className="h-10 w-10 shrink-0 rounded-full object-cover" width={40} height={40} />
           <span className="truncate font-display text-lg sm:text-xl text-gold-gradient">Simba wa Yuda</span>
         </a>
         <nav className="flex items-center gap-2 sm:gap-4">
@@ -226,7 +226,7 @@ function Hero() {
   return (
     <section id="top" className="relative overflow-hidden">
       <div className="absolute inset-0 -z-10">
-        <img src={bannerAsset.url} alt="" className="h-full w-full object-cover opacity-40" />
+        <img src="/public/SWYBANNER.jpeg" alt="" className="h-full w-full object-cover opacity-40" />
         <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/70 to-background" />
       </div>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 sm:py-32 lg:py-44 text-center">
