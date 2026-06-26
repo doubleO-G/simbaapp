@@ -4,16 +4,72 @@ import { createHmac, timingSafeEqual } from "crypto";
 /**
  * Paystack webhook receiver.
  *
- * Public URL (use this in your Paystack Dashboard → Settings → API Keys & Webhooks):
+ * Public URL (configure in Paystack Dashboard → Settings → API Keys & Webhooks):
  *   https://simbawayuda.lovable.app/api/public/paystack-webhook
  *
- * Stable preview URL (for testing against the latest preview build):
+ * Stable preview URL (for testing):
  *   https://project--02d9a3ba-8548-4c65-8120-066e7de20d5a.lovable.app/api/public/paystack-webhook
  *
- * Paystack signs every webhook with HMAC-SHA512 using your SECRET key over the
- * RAW request body and puts the hex digest in the `x-paystack-signature` header.
- * We verify that signature before trusting any payload.
+ * Verifies the `x-paystack-signature` HMAC-SHA512 of the raw body using
+ * PAYSTACK_SECRET_KEY, then routes the event to the merch or partner flow
+ * based on metadata.type / reference prefix.
  */
+
+type PaystackCustomer = { email?: string; first_name?: string; last_name?: string };
+
+type PaystackChargeData = {
+  reference?: string;
+  amount?: number; // minor units (kobo/cents)
+  currency?: string;
+  status?: string;
+  paid_at?: string;
+  customer?: PaystackCustomer;
+  metadata?: Record<string, unknown> | null;
+};
+
+type PaystackEvent = {
+  event?: string;
+  data?: PaystackChargeData;
+};
+
+type FlowType = "merch" | "partner" | "unknown";
+
+function classifyFlow(data: PaystackChargeData): FlowType {
+  const metaType =
+    data.metadata && typeof data.metadata === "object"
+      ? String((data.metadata as Record<string, unknown>).type ?? "")
+      : "";
+  if (metaType === "merchandise") return "merch";
+  if (metaType === "partnership") return "partner";
+
+  const ref = data.reference ?? "";
+  if (ref.startsWith("swy-merch-")) return "merch";
+  if (ref.startsWith("swy-partner-")) return "partner";
+  return "unknown";
+}
+
+async function handleMerchSuccess(data: PaystackChargeData) {
+  console.log("[paystack-webhook] merch payment success", {
+    reference: data.reference,
+    amount: data.amount,
+    customer: data.customer?.email,
+    items: (data.metadata as Record<string, unknown> | undefined)?.items,
+  });
+  // TODO: send branded merch receipt email (pending email domain setup).
+}
+
+async function handlePartnerSuccess(data: PaystackChargeData) {
+  const meta = (data.metadata ?? {}) as Record<string, unknown>;
+  console.log("[paystack-webhook] partner sponsorship success", {
+    reference: data.reference,
+    amount: data.amount,
+    customer: data.customer?.email,
+    tier: meta.tier,
+    tier_name: meta.tier_name,
+  });
+  // TODO: send branded partner welcome + receipt email (pending email domain setup).
+}
+
 export const Route = createFileRoute("/api/public/paystack-webhook")({
   server: {
     handlers: {
@@ -26,13 +82,9 @@ export const Route = createFileRoute("/api/public/paystack-webhook")({
 
         const signature = request.headers.get("x-paystack-signature");
         const rawBody = await request.text();
-
-        if (!signature) {
-          return new Response("Missing signature", { status: 401 });
-        }
+        if (!signature) return new Response("Missing signature", { status: 401 });
 
         const expected = createHmac("sha512", secret).update(rawBody).digest("hex");
-
         let valid = false;
         try {
           const a = Buffer.from(signature, "hex");
@@ -41,35 +93,41 @@ export const Route = createFileRoute("/api/public/paystack-webhook")({
         } catch {
           valid = false;
         }
-
         if (!valid) {
           console.warn("[paystack-webhook] Invalid signature");
           return new Response("Invalid signature", { status: 401 });
         }
 
-        let event: { event?: string; data?: Record<string, unknown> };
+        let event: PaystackEvent;
         try {
-          event = JSON.parse(rawBody);
+          event = JSON.parse(rawBody) as PaystackEvent;
         } catch {
           return new Response("Invalid JSON", { status: 400 });
         }
 
-        // Handle the event. Respond 200 quickly so Paystack doesn't retry.
-        switch (event.event) {
-          case "charge.success": {
-            const data = event.data ?? {};
-            console.log("[paystack-webhook] charge.success", {
-              reference: data.reference,
-              amount: data.amount,
-              currency: data.currency,
-              customer: (data.customer as { email?: string } | undefined)?.email,
-              metadata: data.metadata,
-            });
-            // TODO: persist the order / mark partnership as funded / send branded receipt.
-            break;
+        if (event.event !== "charge.success" || !event.data) {
+          console.log("[paystack-webhook] ignored event", event.event);
+          return new Response("ok", { status: 200 });
+        }
+
+        const data = event.data;
+        if (data.status && data.status !== "success") {
+          console.log("[paystack-webhook] non-success status", data.status);
+          return new Response("ok", { status: 200 });
+        }
+
+        const flow = classifyFlow(data);
+        try {
+          if (flow === "merch") {
+            await handleMerchSuccess(data);
+          } else if (flow === "partner") {
+            await handlePartnerSuccess(data);
+          } else {
+            console.warn("[paystack-webhook] unknown flow for reference", data.reference);
           }
-          default:
-            console.log("[paystack-webhook] event", event.event);
+        } catch (err) {
+          console.error("[paystack-webhook] handler error", err);
+          // Still return 200 so Paystack doesn't retry indefinitely; logged for review.
         }
 
         return new Response("ok", { status: 200 });
