@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import bannerAsset from "@/assets/banner.asset.json";
+import bannerAsset from "@/assets/banner.jpeg";
 import blogoAsset from "@/assets/blogo.png";
 import tshirtBlack from "@/assets/tshirt-black.jpg";
 import tshirtWhite from "@/assets/tshirt-white.jpg";
