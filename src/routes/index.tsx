@@ -27,7 +27,7 @@ export const Route = createFileRoute("/")({
  * CONFIG — Replace these placeholders for production deployment
  * ============================================================ */
 // Get your Paystack public key from https://dashboard.paystack.com/#/settings/developers
-const PAYSTACK_PUBLIC_KEY = "pk_test_46bbad0f47e22e6ac2d09b110cddafdcbc7a1451";
+const PAYSTACK_PUBLIC_KEY = "pk_live_70e633f27be9cd5fc9b335fd6cf63a19430f77a7";
 // Server endpoint that verifies Paystack webhook signatures using PAYSTACK_SECRET_KEY.
 // Configure this URL in your Paystack Dashboard → Settings → API Keys & Webhooks.
 // Replace the host with your custom domain once published.
