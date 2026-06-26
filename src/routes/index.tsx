@@ -28,10 +28,11 @@ export const Route = createFileRoute("/")({
  * ============================================================ */
 // Get your Paystack public key from https://dashboard.paystack.com/#/settings/developers
 const PAYSTACK_PUBLIC_KEY = "pk_test_46bbad0f47e22e6ac2d09b110cddafdcbc7a1451";
-// Server endpoint that verifies the transaction reference & sends email receipts
-// (Paystack sends a basic receipt automatically when a customer email is provided;
-//  configure a webhook at /api/public/paystack-webhook to send branded receipts.)
-const WEBHOOK_URL = "https://your-domain.example.com/api/public/paystack-webhook";
+// Server endpoint that verifies Paystack webhook signatures using PAYSTACK_SECRET_KEY.
+// Configure this URL in your Paystack Dashboard → Settings → API Keys & Webhooks.
+// Replace the host with your custom domain once published.
+const WEBHOOK_URL = "https://simbawayuda.lovable.app/api/public/paystack-webhook";
+
 // Partner access password (change this; ideally move to a server-validated flow)
 const PARTNER_PASSWORD = "lionofjudah2025";
 // Currency for Paystack — KES, USD, GHS, ZAR, NGN supported
