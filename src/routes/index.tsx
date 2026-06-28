@@ -45,6 +45,7 @@ const CURRENCY = "KES";
 /* ============================================================
  * Product catalog
  * ============================================================ */
+type ColorOption = { name: string; swatch: string; image: string };
 type Product = {
   id: string;
   name: string;
@@ -52,12 +53,17 @@ type Product = {
   price: number; // in major units (KES)
   image: string;
   sizes?: string[];
+  colors?: ColorOption[];
 };
 
 const PRODUCTS: Product[] = [
   { id: "tee-classic", name: "Classic Tee",        description: "Everyday cotton tee with gold lion crest.", price: 1000, image: teeClassicBlack, sizes: ["S","M","L","XL"] },
-  { id: "tee-black",   name: "Lion Tee — Black",   description: "Premium cotton tee with gold lion crest.", price: 1500, image: tshirtBlack, sizes: ["S","M","L","XL"] },
-  { id: "tee-white",   name: "Lion Tee — White",   description: "Soft cotton tee with classic crest print.", price: 1500, image: tshirtWhite, sizes: ["S","M","L","XL"] },
+  { id: "tee-lion",    name: "Lion Tee",           description: "Premium cotton tee with gold lion crest.", price: 1500, image: tshirtBlack, sizes: ["S","M","L","XL"],
+    colors: [
+      { name: "Black",     swatch: "#0a0a0a", image: tshirtBlack },
+      { name: "White",     swatch: "#f5f5f0", image: tshirtWhite },
+      { name: "Navy Blue", swatch: "#0f1e3d", image: tshirtBlack },
+    ] },
   { id: "polo",        name: "Lion Polo",          description: "Premium piqué polo with gold lion crest.", price: 1300, image: poloBlack, sizes: ["S","M","L","XL"] },
   { id: "hoodie",      name: "Simba Hoodie",       description: "Heavyweight fleece hoodie, embroidered crest.", price: 3500, image: hoodieBlack, sizes: ["S","M","L","XL"] },
   { id: "bomber",      name: "Bomba Jacket",       description: "Satin bomber jacket with embroidered crest.", price: 2800, image: bomberBlack, sizes: ["S","M","L","XL"] },
@@ -111,7 +117,7 @@ function payWithPaystack(opts: {
 /* ============================================================
  * Cart state (localStorage-backed)
  * ============================================================ */
-type CartItem = { id: string; name: string; price: number; image: string; size?: string; qty: number; key: string };
+type CartItem = { id: string; name: string; price: number; image: string; size?: string; color?: string; qty: number; key: string };
 
 function useCart() {
   const [items, setItems] = useState<CartItem[]>([]);
@@ -125,12 +131,12 @@ function useCart() {
     localStorage.setItem("swy_cart", JSON.stringify(items));
   }, [items]);
 
-  const add = (p: Product, size?: string) => {
-    const key = `${p.id}${size ? `-${size}` : ""}`;
+  const add = (p: Product, size?: string, color?: ColorOption) => {
+    const key = `${p.id}${size ? `-${size}` : ""}${color ? `-${color.name}` : ""}`;
     setItems(prev => {
       const ex = prev.find(i => i.key === key);
       if (ex) return prev.map(i => i.key === key ? { ...i, qty: i.qty + 1 } : i);
-      return [...prev, { id: p.id, key, name: p.name, price: p.price, image: p.image, size, qty: 1 }];
+      return [...prev, { id: p.id, key, name: p.name, price: p.price, image: color?.image ?? p.image, size, color: color?.name, qty: 1 }];
     });
   };
   const setQty = (key: string, qty: number) => setItems(prev => qty <= 0
@@ -165,7 +171,7 @@ function Index() {
       <Header cartCount={cart.count} onCart={() => setCartOpen(true)} onPartner={() => setPartnerOpen(true)} partnerUnlocked={partnerUnlocked} />
       <Hero />
       <EventInfo />
-      <Store products={PRODUCTS} onAdd={(p, s) => { cart.add(p, s); setCartOpen(true); }} />
+      <Store products={PRODUCTS} onAdd={(p, s, c) => { cart.add(p, s, c); setCartOpen(true); }} />
       {partnerUnlocked && (
         <PartnersSection onPay={(tier, email) => {
           payWithPaystack({
@@ -185,7 +191,7 @@ function Index() {
           email,
           amount: cart.total,
           reference: `swy-merch-${Date.now()}`,
-          metadata: { type: "merchandise", items: cart.items.map(i => ({ id: i.id, name: i.name, price: i.price, size: i.size, qty: i.qty })) },
+          metadata: { type: "merchandise", items: cart.items.map(i => ({ id: i.id, name: i.name, price: i.price, size: i.size, color: i.color, qty: i.qty })) },
           onSuccess: (ref) => { const amt = cart.total; cart.clear(); setCartOpen(false); setConfirmation({ ref, type: "merch", amount: amt, email }); },
           onClose: () => {},
         });
@@ -282,7 +288,7 @@ function EventInfo() {
   );
 }
 
-function Store({ products, onAdd }: { products: Product[]; onAdd: (p: Product, size?: string) => void }) {
+function Store({ products, onAdd }: { products: Product[]; onAdd: (p: Product, size?: string, color?: ColorOption) => void }) {
   return (
     <section id="shop" className="py-20 sm:py-28 border-t border-border">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -298,12 +304,14 @@ function Store({ products, onAdd }: { products: Product[]; onAdd: (p: Product, s
   );
 }
 
-function ProductCard({ product, onAdd }: { product: Product; onAdd: (p: Product, size?: string) => void }) {
+function ProductCard({ product, onAdd }: { product: Product; onAdd: (p: Product, size?: string, color?: ColorOption) => void }) {
   const [size, setSize] = useState<string | undefined>(product.sizes?.[1]);
+  const [color, setColor] = useState<ColorOption | undefined>(product.colors?.[0]);
+  const displayImage = color?.image ?? product.image;
   return (
     <article className="card-luxe overflow-hidden flex flex-col">
       <div className="aspect-square bg-muted overflow-hidden">
-        <img src={product.image} alt={product.name} loading="lazy" width={1024} height={1024} className="h-full w-full object-cover transition-transform duration-500 hover:scale-105" />
+        <img src={displayImage} alt={product.name} loading="lazy" width={1024} height={1024} className="h-full w-full object-cover transition-transform duration-500 hover:scale-105" />
       </div>
       <div className="p-5 flex-1 flex flex-col gap-3">
         <div className="flex items-start justify-between gap-3">
@@ -311,6 +319,17 @@ function ProductCard({ product, onAdd }: { product: Product; onAdd: (p: Product,
           <span className="text-primary font-semibold whitespace-nowrap">{fmt(product.price)}</span>
         </div>
         <p className="text-sm text-muted-foreground">{product.description}</p>
+        {product.colors && (
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs text-muted-foreground mr-1">Color:</span>
+            {product.colors.map(c => (
+              <button key={c.name} onClick={() => setColor(c)} title={c.name} aria-label={c.name}
+                className={`w-7 h-7 rounded-full border-2 transition ${color?.name === c.name ? "border-primary scale-110" : "border-border hover:border-primary/60"}`}
+                style={{ backgroundColor: c.swatch }} />
+            ))}
+            {color && <span className="text-xs text-muted-foreground">{color.name}</span>}
+          </div>
+        )}
         {product.sizes && (
           <div className="flex flex-wrap gap-2">
             {product.sizes.map(s => (
@@ -321,7 +340,7 @@ function ProductCard({ product, onAdd }: { product: Product; onAdd: (p: Product,
             ))}
           </div>
         )}
-        <button onClick={() => onAdd(product, size)} className="btn-gold hover:btn-gold-hover mt-auto w-full">Add to Cart</button>
+        <button onClick={() => onAdd(product, size, color)} className="btn-gold hover:btn-gold-hover mt-auto w-full">Add to Cart</button>
       </div>
     </article>
   );
@@ -350,7 +369,7 @@ function CartDrawer({ open, onClose, cart, onCheckout }: { open: boolean; onClos
                   <p className="truncate font-medium">{i.name}</p>
                   <button onClick={() => cart.remove(i.key)} className="text-muted-foreground hover:text-destructive text-sm">Remove</button>
                 </div>
-                {i.size && <p className="text-xs text-muted-foreground">Size: {i.size}</p>}
+                {(i.size || i.color) && <p className="text-xs text-muted-foreground">{[i.color && `Color: ${i.color}`, i.size && `Size: ${i.size}`].filter(Boolean).join(" • ")}</p>}
                 <div className="flex items-center justify-between mt-2">
                   <div className="flex items-center gap-2">
                     <button onClick={() => cart.setQty(i.key, i.qty - 1)} className="w-7 h-7 rounded border border-border hover:border-primary">−</button>
