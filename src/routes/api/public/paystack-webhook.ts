@@ -48,14 +48,37 @@ function classifyFlow(data: PaystackChargeData): FlowType {
   return "unknown";
 }
 
+async function persistOrder(flow: FlowType, data: PaystackChargeData) {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const meta = (data.metadata ?? {}) as Record<string, unknown>;
+  const customerName = [data.customer?.first_name, data.customer?.last_name].filter(Boolean).join(" ") || null;
+  const items = Array.isArray((meta as { items?: unknown }).items) ? (meta as { items: unknown[] }).items : null;
+  const { error } = await supabaseAdmin.from("orders").upsert(
+    {
+      reference: data.reference!,
+      email: (data.customer?.email ?? "").toLowerCase(),
+      type: flow === "partner" ? "partner" : "merch",
+      amount: (data.amount ?? 0) / 100,
+      currency: data.currency ?? "KES",
+      status: data.status ?? "success",
+      customer_name: customerName,
+      items: items as unknown as object | null,
+      tier: typeof meta.tier === "string" ? (meta.tier as string) : null,
+      tier_name: typeof meta.tier_name === "string" ? (meta.tier_name as string) : null,
+      metadata: meta as object,
+    },
+    { onConflict: "reference" },
+  );
+  if (error) console.error("[paystack-webhook] failed to persist order", error);
+}
+
 async function handleMerchSuccess(data: PaystackChargeData) {
   console.log("[paystack-webhook] merch payment success", {
     reference: data.reference,
     amount: data.amount,
     customer: data.customer?.email,
-    items: (data.metadata as Record<string, unknown> | undefined)?.items,
   });
-  // TODO: send branded merch receipt email (pending email domain setup).
+  await persistOrder("merch", data);
 }
 
 async function handlePartnerSuccess(data: PaystackChargeData) {
@@ -67,7 +90,7 @@ async function handlePartnerSuccess(data: PaystackChargeData) {
     tier: meta.tier,
     tier_name: meta.tier_name,
   });
-  // TODO: send branded partner welcome + receipt email (pending email domain setup).
+  await persistOrder("partner", data);
 }
 
 export const Route = createFileRoute("/api/public/paystack-webhook")({
