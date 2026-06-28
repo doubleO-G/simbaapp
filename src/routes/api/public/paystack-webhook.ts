@@ -62,10 +62,10 @@ async function persistOrder(flow: FlowType, data: PaystackChargeData) {
       currency: data.currency ?? "KES",
       status: data.status ?? "success",
       customer_name: customerName,
-      items: items as unknown as object | null,
+      items: (items ?? null) as never,
       tier: typeof meta.tier === "string" ? (meta.tier as string) : null,
       tier_name: typeof meta.tier_name === "string" ? (meta.tier_name as string) : null,
-      metadata: meta as object,
+      metadata: meta as never,
     },
     { onConflict: "reference" },
   );
