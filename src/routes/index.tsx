@@ -191,7 +191,7 @@ function Index() {
           email,
           amount: cart.total,
           reference: `swy-merch-${Date.now()}`,
-          metadata: { type: "merchandise", items: cart.items.map(i => ({ id: i.id, name: i.name, price: i.price, size: i.size, qty: i.qty })) },
+          metadata: { type: "merchandise", items: cart.items.map(i => ({ id: i.id, name: i.name, price: i.price, size: i.size, color: i.color, qty: i.qty })) },
           onSuccess: (ref) => { const amt = cart.total; cart.clear(); setCartOpen(false); setConfirmation({ ref, type: "merch", amount: amt, email }); },
           onClose: () => {},
         });
