@@ -171,7 +171,7 @@ function Index() {
       <Header cartCount={cart.count} onCart={() => setCartOpen(true)} onPartner={() => setPartnerOpen(true)} partnerUnlocked={partnerUnlocked} />
       <Hero />
       <EventInfo />
-      <Store products={PRODUCTS} onAdd={(p, s) => { cart.add(p, s); setCartOpen(true); }} />
+      <Store products={PRODUCTS} onAdd={(p, s, c) => { cart.add(p, s, c); setCartOpen(true); }} />
       {partnerUnlocked && (
         <PartnersSection onPay={(tier, email) => {
           payWithPaystack({
