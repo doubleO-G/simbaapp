@@ -30,12 +30,11 @@ export const lookupOrders = createServerFn({ method: "POST" })
     }
     if (!data.email) return { orders: [] };
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: rows, error } = await supabaseAdmin
-      .from("orders")
+    const { data: rows, error } = await (supabaseAdmin.from("orders" as never) as never)
       .select("id, reference, email, type, amount, currency, status, customer_name, items, tier, tier_name, created_at")
       .ilike("email", data.email)
       .order("created_at", { ascending: false })
       .limit(200);
-    if (error) throw new Error(error.message);
+    if (error) throw new Error((error as { message: string }).message);
     return { orders: (rows ?? []) as OrderRow[] };
   });
