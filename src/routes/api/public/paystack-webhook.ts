@@ -53,7 +53,8 @@ async function persistOrder(flow: FlowType, data: PaystackChargeData) {
   const meta = (data.metadata ?? {}) as Record<string, unknown>;
   const customerName = [data.customer?.first_name, data.customer?.last_name].filter(Boolean).join(" ") || null;
   const items = Array.isArray((meta as { items?: unknown }).items) ? (meta as { items: unknown[] }).items : null;
-  const { error } = await (supabaseAdmin.from("orders" as never) as never).upsert(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error } = await (supabaseAdmin as any).from("orders").upsert(
     {
       reference: data.reference!,
       email: (data.customer?.email ?? "").toLowerCase(),
