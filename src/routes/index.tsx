@@ -8,6 +8,10 @@ import hoodieBlack from "@/assets/hoodie-black.jpg";
 import capBlack from "@/assets/cap-black.jpg";
 import mugBlack from "@/assets/mug-black.jpg";
 import toteBlack from "@/assets/tote-black.jpg";
+import poloBlack from "@/assets/polo-black.jpg";
+import teeClassicBlack from "@/assets/tee-classic-black.jpg";
+import carSticker from "@/assets/car-sticker.jpg";
+import bomberBlack from "@/assets/bomber-black.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -16,8 +20,8 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Shop official Simba wa Yuda merchandise and partner with us to make the live recording happen." },
       { property: "og:title", content: "Simba wa Yuda — Live Recording Event" },
       { property: "og:description", content: "Official merchandise store and partnership portal for the Simba wa Yuda live recording." },
-      { property: "og:image", content: bannerAsset.url },
-      { property: "twitter:image", content: bannerAsset.url },
+      { property: "og:image", content: bannerAsset },
+      { property: "twitter:image", content: bannerAsset },
     ],
   }),
   component: Index,
@@ -51,12 +55,16 @@ type Product = {
 };
 
 const PRODUCTS: Product[] = [
-  { id: "tee-black", name: "Lion Tee — Black", description: "Premium cotton tee with gold lion crest.", price: 1500, image: tshirtBlack, sizes: ["S","M","L","XL"] },
-  { id: "tee-white", name: "Lion Tee — White", description: "Soft cotton tee with classic crest print.", price: 1500, image: tshirtWhite, sizes: ["S","M","L","XL"] },
-  { id: "hoodie",    name: "Simba Hoodie",      description: "Heavyweight fleece hoodie, embroidered crest.", price: 3500, image: hoodieBlack, sizes: ["S","M","L","XL"] },
-  { id: "cap",       name: "Lion Cap",          description: "Structured cap with gold embroidery.", price: 1200, image: capBlack },
-  { id: "mug",       name: "Roar Mug",          description: "11oz ceramic mug with gold crest.", price: 800,  image: mugBlack },
-  { id: "tote",      name: "Lion Tote",         description: "Heavy canvas tote — carry the roar.", price: 1000, image: toteBlack },
+  { id: "tee-classic", name: "Classic Tee",        description: "Everyday cotton tee with gold lion crest.", price: 1000, image: teeClassicBlack, sizes: ["S","M","L","XL"] },
+  { id: "tee-black",   name: "Lion Tee — Black",   description: "Premium cotton tee with gold lion crest.", price: 1500, image: tshirtBlack, sizes: ["S","M","L","XL"] },
+  { id: "tee-white",   name: "Lion Tee — White",   description: "Soft cotton tee with classic crest print.", price: 1500, image: tshirtWhite, sizes: ["S","M","L","XL"] },
+  { id: "polo",        name: "Lion Polo",          description: "Premium piqué polo with gold lion crest.", price: 1300, image: poloBlack, sizes: ["S","M","L","XL"] },
+  { id: "hoodie",      name: "Simba Hoodie",       description: "Heavyweight fleece hoodie, embroidered crest.", price: 3500, image: hoodieBlack, sizes: ["S","M","L","XL"] },
+  { id: "bomber",      name: "Bomba Jacket",       description: "Satin bomber jacket with embroidered crest.", price: 2800, image: bomberBlack, sizes: ["S","M","L","XL"] },
+  { id: "cap",         name: "Lion Cap",           description: "Structured cap with gold embroidery.", price: 1200, image: capBlack },
+  { id: "sticker",     name: "Lion Car Sticker",   description: "Die-cut vinyl sticker — carry the roar.", price: 1200, image: carSticker },
+  { id: "mug",         name: "Roar Mug",           description: "11oz ceramic mug with gold crest.", price: 800,  image: mugBlack },
+  { id: "tote",        name: "Lion Tote",          description: "Heavy canvas tote — carry the roar.", price: 1000, image: toteBlack },
 ];
 
 const TIERS = [
@@ -177,7 +185,7 @@ function Index() {
           email,
           amount: cart.total,
           reference: `swy-merch-${Date.now()}`,
-          metadata: { type: "merchandise", items: cart.items.map(i => ({ id: i.id, size: i.size, qty: i.qty })) },
+          metadata: { type: "merchandise", items: cart.items.map(i => ({ id: i.id, name: i.name, price: i.price, size: i.size, qty: i.qty })) },
           onSuccess: (ref) => { const amt = cart.total; cart.clear(); setCartOpen(false); setConfirmation({ ref, type: "merch", amount: amt, email }); },
           onClose: () => {},
         });
@@ -480,7 +488,7 @@ function Footer() {
     <footer className="border-t border-border py-10 mt-10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
         <div className="flex min-w-0 items-center gap-3">
-          <img src={blogoAsset.url} alt="" className="h-8 w-8 shrink-0 rounded-full" />
+          <img src={blogoAsset} alt="" className="h-8 w-8 shrink-0 rounded-full" />
           <p className="truncate text-sm text-muted-foreground">© {new Date().getFullYear()} Simba wa Yuda. Revelation 5:5</p>
         </div>
         <p className="text-xs text-muted-foreground">Pipeline, Embakasi • Nairobi</p>
