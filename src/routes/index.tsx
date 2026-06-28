@@ -45,6 +45,7 @@ const CURRENCY = "KES";
 /* ============================================================
  * Product catalog
  * ============================================================ */
+type ColorOption = { name: string; swatch: string; image: string };
 type Product = {
   id: string;
   name: string;
@@ -52,12 +53,17 @@ type Product = {
   price: number; // in major units (KES)
   image: string;
   sizes?: string[];
+  colors?: ColorOption[];
 };
 
 const PRODUCTS: Product[] = [
   { id: "tee-classic", name: "Classic Tee",        description: "Everyday cotton tee with gold lion crest.", price: 1000, image: teeClassicBlack, sizes: ["S","M","L","XL"] },
-  { id: "tee-black",   name: "Lion Tee — Black",   description: "Premium cotton tee with gold lion crest.", price: 1500, image: tshirtBlack, sizes: ["S","M","L","XL"] },
-  { id: "tee-white",   name: "Lion Tee — White",   description: "Soft cotton tee with classic crest print.", price: 1500, image: tshirtWhite, sizes: ["S","M","L","XL"] },
+  { id: "tee-lion",    name: "Lion Tee",           description: "Premium cotton tee with gold lion crest.", price: 1500, image: tshirtBlack, sizes: ["S","M","L","XL"],
+    colors: [
+      { name: "Black",     swatch: "#0a0a0a", image: tshirtBlack },
+      { name: "White",     swatch: "#f5f5f0", image: tshirtWhite },
+      { name: "Navy Blue", swatch: "#0f1e3d", image: tshirtBlack },
+    ] },
   { id: "polo",        name: "Lion Polo",          description: "Premium piqué polo with gold lion crest.", price: 1300, image: poloBlack, sizes: ["S","M","L","XL"] },
   { id: "hoodie",      name: "Simba Hoodie",       description: "Heavyweight fleece hoodie, embroidered crest.", price: 3500, image: hoodieBlack, sizes: ["S","M","L","XL"] },
   { id: "bomber",      name: "Bomba Jacket",       description: "Satin bomber jacket with embroidered crest.", price: 2800, image: bomberBlack, sizes: ["S","M","L","XL"] },
