@@ -288,7 +288,7 @@ function EventInfo() {
   );
 }
 
-function Store({ products, onAdd }: { products: Product[]; onAdd: (p: Product, size?: string) => void }) {
+function Store({ products, onAdd }: { products: Product[]; onAdd: (p: Product, size?: string, color?: ColorOption) => void }) {
   return (
     <section id="shop" className="py-20 sm:py-28 border-t border-border">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -304,12 +304,14 @@ function Store({ products, onAdd }: { products: Product[]; onAdd: (p: Product, s
   );
 }
 
-function ProductCard({ product, onAdd }: { product: Product; onAdd: (p: Product, size?: string) => void }) {
+function ProductCard({ product, onAdd }: { product: Product; onAdd: (p: Product, size?: string, color?: ColorOption) => void }) {
   const [size, setSize] = useState<string | undefined>(product.sizes?.[1]);
+  const [color, setColor] = useState<ColorOption | undefined>(product.colors?.[0]);
+  const displayImage = color?.image ?? product.image;
   return (
     <article className="card-luxe overflow-hidden flex flex-col">
       <div className="aspect-square bg-muted overflow-hidden">
-        <img src={product.image} alt={product.name} loading="lazy" width={1024} height={1024} className="h-full w-full object-cover transition-transform duration-500 hover:scale-105" />
+        <img src={displayImage} alt={product.name} loading="lazy" width={1024} height={1024} className="h-full w-full object-cover transition-transform duration-500 hover:scale-105" />
       </div>
       <div className="p-5 flex-1 flex flex-col gap-3">
         <div className="flex items-start justify-between gap-3">
@@ -317,6 +319,17 @@ function ProductCard({ product, onAdd }: { product: Product; onAdd: (p: Product,
           <span className="text-primary font-semibold whitespace-nowrap">{fmt(product.price)}</span>
         </div>
         <p className="text-sm text-muted-foreground">{product.description}</p>
+        {product.colors && (
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs text-muted-foreground mr-1">Color:</span>
+            {product.colors.map(c => (
+              <button key={c.name} onClick={() => setColor(c)} title={c.name} aria-label={c.name}
+                className={`w-7 h-7 rounded-full border-2 transition ${color?.name === c.name ? "border-primary scale-110" : "border-border hover:border-primary/60"}`}
+                style={{ backgroundColor: c.swatch }} />
+            ))}
+            {color && <span className="text-xs text-muted-foreground">{color.name}</span>}
+          </div>
+        )}
         {product.sizes && (
           <div className="flex flex-wrap gap-2">
             {product.sizes.map(s => (
@@ -327,7 +340,7 @@ function ProductCard({ product, onAdd }: { product: Product; onAdd: (p: Product,
             ))}
           </div>
         )}
-        <button onClick={() => onAdd(product, size)} className="btn-gold hover:btn-gold-hover mt-auto w-full">Add to Cart</button>
+        <button onClick={() => onAdd(product, size, color)} className="btn-gold hover:btn-gold-hover mt-auto w-full">Add to Cart</button>
       </div>
     </article>
   );
