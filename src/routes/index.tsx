@@ -369,7 +369,7 @@ function CartDrawer({ open, onClose, cart, onCheckout }: { open: boolean; onClos
                   <p className="truncate font-medium">{i.name}</p>
                   <button onClick={() => cart.remove(i.key)} className="text-muted-foreground hover:text-destructive text-sm">Remove</button>
                 </div>
-                {i.size && <p className="text-xs text-muted-foreground">Size: {i.size}</p>}
+                {(i.size || i.color) && <p className="text-xs text-muted-foreground">{[i.color && `Color: ${i.color}`, i.size && `Size: ${i.size}`].filter(Boolean).join(" • ")}</p>}
                 <div className="flex items-center justify-between mt-2">
                   <div className="flex items-center gap-2">
                     <button onClick={() => cart.setQty(i.key, i.qty - 1)} className="w-7 h-7 rounded border border-border hover:border-primary">−</button>
