@@ -117,7 +117,7 @@ function payWithPaystack(opts: {
 /* ============================================================
  * Cart state (localStorage-backed)
  * ============================================================ */
-type CartItem = { id: string; name: string; price: number; image: string; size?: string; qty: number; key: string };
+type CartItem = { id: string; name: string; price: number; image: string; size?: string; color?: string; qty: number; key: string };
 
 function useCart() {
   const [items, setItems] = useState<CartItem[]>([]);
@@ -131,12 +131,12 @@ function useCart() {
     localStorage.setItem("swy_cart", JSON.stringify(items));
   }, [items]);
 
-  const add = (p: Product, size?: string) => {
-    const key = `${p.id}${size ? `-${size}` : ""}`;
+  const add = (p: Product, size?: string, color?: ColorOption) => {
+    const key = `${p.id}${size ? `-${size}` : ""}${color ? `-${color.name}` : ""}`;
     setItems(prev => {
       const ex = prev.find(i => i.key === key);
       if (ex) return prev.map(i => i.key === key ? { ...i, qty: i.qty + 1 } : i);
-      return [...prev, { id: p.id, key, name: p.name, price: p.price, image: p.image, size, qty: 1 }];
+      return [...prev, { id: p.id, key, name: p.name, price: p.price, image: color?.image ?? p.image, size, color: color?.name, qty: 1 }];
     });
   };
   const setQty = (key: string, qty: number) => setItems(prev => qty <= 0
