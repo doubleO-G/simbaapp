@@ -459,6 +459,47 @@ function PartnersSection({ onPay }: { onPay: (tier: typeof TIERS[number], email:
           <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">Reach 1,500–2,000 engaged attendees. Choose a partnership level that fits your goals — every tier includes co-branding and visibility opportunities.</p>
         </div>
 
+        {/* Venue showcase */}
+        <div className="mb-16">
+          <div className="flex flex-wrap items-end justify-between gap-3 mb-6">
+            <div>
+              <p className="uppercase tracking-[0.3em] text-xs text-primary mb-2">The Venue</p>
+              <h3 className="text-2xl sm:text-3xl">Built for <span className="text-gold-gradient">1,500 – 2,000</span> Attendees</h3>
+              <p className="text-muted-foreground text-sm mt-2 max-w-2xl">A full-scale auditorium with professional stage, lighting, LED screens and live-band production — ready to host a packed live recording night.</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {VENUE_PHOTOS.map((src, i) => (
+              <div key={i} className="aspect-[4/3] overflow-hidden rounded-lg border border-border group">
+                <img src={src} alt={`Venue photo ${i + 1}`} loading="lazy" className="h-full w-full object-cover transition group-hover:scale-105" />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Convenor profile */}
+        <div className="card-luxe p-6 sm:p-10 mb-16 grid md:grid-cols-[auto_1fr] gap-6 items-center">
+          <img src={blogoAsset} alt="Simba wa Yuda crest" className="h-28 w-28 rounded-full mx-auto md:mx-0" />
+          <div>
+            <p className="uppercase tracking-[0.3em] text-xs text-primary mb-2">About The Convenor</p>
+            <h3 className="text-2xl sm:text-3xl mb-3">Simba wa Yuda</h3>
+            <p className="text-muted-foreground leading-relaxed">
+              Since <span className="text-foreground font-semibold">2017</span>, Simba wa Yuda has convened gospel gatherings that bring
+              together worshippers, ministers and live bands across Kenya. What began as an intimate worship moment has grown into an
+              annual flagship experience drawing <span className="text-foreground font-semibold">1,500 – 2,000 attendees</span> per night,
+              with live recordings, choir ensembles and full-band productions. This year's live recording marks the next chapter — and
+              partners stand at the heart of making it possible.
+            </p>
+            <div className="flex flex-wrap gap-4 mt-5 text-sm">
+              <span className="px-3 py-1 rounded-full border border-border">Est. 2017</span>
+              <span className="px-3 py-1 rounded-full border border-border">1,500–2,000 attendees</span>
+              <span className="px-3 py-1 rounded-full border border-border">Live band &amp; choir</span>
+              <span className="px-3 py-1 rounded-full border border-border">Nairobi, Kenya</span>
+            </div>
+          </div>
+        </div>
+
+
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-12">
           {TIERS.map(t => (
             <button key={t.id} onClick={() => setSelected(t)}
