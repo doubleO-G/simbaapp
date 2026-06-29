@@ -9,7 +9,7 @@ import capBlack from "@/assets/cap-black.jpg";
 import mugBlack from "@/assets/mug-black.jpg";
 import toteBlack from "@/assets/tote-black.jpg";
 import poloBlack from "@/assets/polo-black.jpg";
-import teeClassicBlack from "@/assets/tee-classic-black.jpg";
+
 import carSticker from "@/assets/car-sticker.jpg";
 import bomberBlack from "@/assets/bomber-black.jpg";
 import venue1 from "@/assets/venue/DSC1161.jpg.asset.json";
