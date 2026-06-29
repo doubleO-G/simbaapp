@@ -12,6 +12,15 @@ import poloBlack from "@/assets/polo-black.jpg";
 import teeClassicBlack from "@/assets/tee-classic-black.jpg";
 import carSticker from "@/assets/car-sticker.jpg";
 import bomberBlack from "@/assets/bomber-black.jpg";
+import venue1 from "@/assets/venue/DSC1161.jpg.asset.json";
+import venue2 from "@/assets/venue/DSC1164.jpg.asset.json";
+import venue3 from "@/assets/venue/DSC1166.jpg.asset.json";
+import venue4 from "@/assets/venue/DSC1171.jpg.asset.json";
+import venue5 from "@/assets/venue/DSC1173.jpg.asset.json";
+import venue6 from "@/assets/venue/DSC1174.jpg.asset.json";
+import venue7 from "@/assets/venue/DSC1177.jpg.asset.json";
+import venue8 from "@/assets/venue/DSC1179.jpg.asset.json";
+const VENUE_PHOTOS = [venue1, venue2, venue3, venue4, venue5, venue6, venue7, venue8].map(v => v.url);
 
 export const Route = createFileRoute("/")({
   head: () => ({
