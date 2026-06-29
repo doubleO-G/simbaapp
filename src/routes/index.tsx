@@ -9,7 +9,7 @@ import capBlack from "@/assets/cap-black.jpg";
 import mugBlack from "@/assets/mug-black.jpg";
 import toteBlack from "@/assets/tote-black.jpg";
 import poloBlack from "@/assets/polo-black.jpg";
-import teeClassicBlack from "@/assets/tee-classic-black.jpg";
+
 import carSticker from "@/assets/car-sticker.jpg";
 import bomberBlack from "@/assets/bomber-black.jpg";
 import venue1 from "@/assets/venue/DSC1161.jpg.asset.json";
@@ -66,17 +66,31 @@ type Product = {
 };
 
 const PRODUCTS: Product[] = [
-  { id: "tee-classic", name: "Classic Tee",        description: "Everyday cotton tee with gold lion crest.", price: 1000, image: teeClassicBlack, sizes: ["S","M","L","XL"] },
   { id: "tee-lion",    name: "Lion Tee",           description: "Premium cotton tee with gold lion crest.", price: 1500, image: tshirtBlack, sizes: ["S","M","L","XL"],
     colors: [
       { name: "Black",     swatch: "#0a0a0a", image: tshirtBlack },
       { name: "White",     swatch: "#f5f5f0", image: tshirtWhite },
       { name: "Navy Blue", swatch: "#0f1e3d", image: tshirtBlack },
     ] },
-  { id: "polo",        name: "Lion Polo",          description: "Premium piqué polo with gold lion crest.", price: 1300, image: poloBlack, sizes: ["S","M","L","XL"] },
-  { id: "hoodie",      name: "Simba Hoodie",       description: "Heavyweight fleece hoodie, embroidered crest.", price: 3500, image: hoodieBlack, sizes: ["S","M","L","XL"] },
+  { id: "polo",        name: "Lion Polo",          description: "Premium piqué polo with gold lion crest.", price: 1300, image: poloBlack, sizes: ["S","M","L","XL"],
+    colors: [
+      { name: "Black",     swatch: "#0a0a0a", image: poloBlack },
+      { name: "White",     swatch: "#f5f5f0", image: poloBlack },
+      { name: "Navy Blue", swatch: "#0f1e3d", image: poloBlack },
+    ] },
+  { id: "hoodie",      name: "Simba Hoodie",       description: "Heavyweight fleece hoodie, embroidered crest.", price: 3500, image: hoodieBlack, sizes: ["S","M","L","XL"],
+    colors: [
+      { name: "Black",     swatch: "#0a0a0a", image: hoodieBlack },
+      { name: "Grey",      swatch: "#6b6b6b", image: hoodieBlack },
+      { name: "Navy Blue", swatch: "#0f1e3d", image: hoodieBlack },
+    ] },
   { id: "bomber",      name: "Bomba Jacket",       description: "Satin bomber jacket with embroidered crest.", price: 2800, image: bomberBlack, sizes: ["S","M","L","XL"] },
-  { id: "cap",         name: "Lion Cap",           description: "Structured cap with gold embroidery.", price: 1200, image: capBlack },
+  { id: "cap",         name: "Lion Cap",           description: "Structured cap with gold embroidery.", price: 1200, image: capBlack,
+    colors: [
+      { name: "Black",     swatch: "#0a0a0a", image: capBlack },
+      { name: "White",     swatch: "#f5f5f0", image: capBlack },
+      { name: "Navy Blue", swatch: "#0f1e3d", image: capBlack },
+    ] },
   { id: "sticker",     name: "Lion Car Sticker",   description: "Die-cut vinyl sticker — carry the roar.", price: 1200, image: carSticker },
   { id: "mug",         name: "Roar Mug",           description: "11oz ceramic mug with gold crest.", price: 800,  image: mugBlack },
   { id: "tote",        name: "Lion Tote",          description: "Heavy canvas tote — carry the roar.", price: 1000, image: toteBlack },
