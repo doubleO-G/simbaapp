@@ -416,7 +416,7 @@ function CartDrawer({ open, onClose, cart, onCheckout }: { open: boolean; onClos
               className="w-full bg-background border border-border rounded-md px-3 py-2 focus:outline-none focus:border-primary" />
             {err && <p className="text-destructive text-sm">{err}</p>}
             <button onClick={() => valid ? onCheckout(email) : setErr("Enter a valid email address.")} className="btn-gold hover:btn-gold-hover w-full">
-              Checkout with Paystack
+              Checkout with Mpesa/Card
             </button>
             <p className="text-xs text-muted-foreground text-center">Secure payment • Visa, Mastercard, Mobile Money</p>
           </div>
