@@ -198,7 +198,7 @@ function Index() {
         <div className="relative z-50 bg-primary text-primary-foreground">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-center gap-3 text-center">
             <p className="text-sm sm:text-base font-medium">
-              <span className="font-semibold">The Roar Is Shipping.</span> You caught the live recording — now wear it. All merch in stock, ready to ship.{" "}
+              <span className="font-semibold">The Roar Is Shipping.</span> Thank you to everyone who already bought. All merch in stock, ready to ship — grab yours as we look forward to the songs dropping on the public domain.{" "}
               <a href="#shop" className="underline font-semibold hover:opacity-80">Shop the merch →</a>
             </p>
             <button onClick={() => { sessionStorage.setItem("swy_banner_dismissed", "1"); setBannerOpen(false); }} aria-label="Dismiss announcement" className="absolute right-3 top-1/2 -translate-y-1/2 text-primary-foreground/80 hover:text-primary-foreground text-xl leading-none">×</button>
@@ -286,8 +286,8 @@ function Hero() {
           <span className="text-gold-gradient">Simba wa Yuda</span>
         </h1>
         <p className="mt-6 max-w-2xl mx-auto text-base sm:text-lg text-muted-foreground">
-          Help us raise <span className="text-foreground font-semibold">$4,500</span> to bring the live recording to life.
-          Wear the vision. Partner the movement.
+          The live recording is done. To everyone who already grabbed their merch — thank you for carrying the vision.
+          To those still watching: your gear is in stock and ready to ship. Wear the roar now as we look forward to the songs dropping on the public domain.
         </p>
         <div className="mt-10 flex flex-wrap justify-center gap-4">
           <a href="#shop" className="btn-gold hover:btn-gold-hover">Shop Merchandise</a>
