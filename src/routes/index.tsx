@@ -196,12 +196,18 @@ function Index() {
     <div className="min-h-screen">
       {bannerOpen && (
         <div className="relative z-50 bg-primary text-primary-foreground">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-center gap-3 text-center">
-            <p className="text-sm sm:text-base font-medium">
-              <span className="font-semibold">The Roar Is Shipping.</span> Thank you to everyone who already bought. All merch in stock, ready to ship — grab yours as we look forward to the songs dropping on the public domain.{" "}
-              <a href="#shop" className="underline font-semibold hover:opacity-80">Shop the merch →</a>
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3 sm:py-4 text-center">
+            <p className="text-sm sm:text-base font-semibold">The room roared. The moment is still alive.</p>
+            <p className="mt-1 text-sm sm:text-base">
+              Every Simba wa Yuda piece is fully stocked and ready to ship now. No waiting. No delays.
+              <span className="hidden sm:inline"> Asante to everyone who already secured theirs — you caught the vision early and helped carry this sound beyond the room.</span>
+              <span className="sm:hidden"> Asante to everyone who already secured theirs.</span>
             </p>
-            <button onClick={() => { sessionStorage.setItem("swy_banner_dismissed", "1"); setBannerOpen(false); }} aria-label="Dismiss announcement" className="absolute right-3 top-1/2 -translate-y-1/2 text-primary-foreground/80 hover:text-primary-foreground text-xl leading-none">×</button>
+            <p className="mt-1 text-sm sm:text-base">
+              Haven’t ordered yet? The door is still open.{" "}
+              <a href="#shop" className="underline font-semibold hover:opacity-80">Complete the moment and wear the roar →</a>
+            </p>
+            <button onClick={() => { sessionStorage.setItem("swy_banner_dismissed", "1"); setBannerOpen(false); }} aria-label="Dismiss announcement" className="absolute right-3 top-3 text-primary-foreground/80 hover:text-primary-foreground text-xl leading-none">×</button>
           </div>
         </div>
       )}
