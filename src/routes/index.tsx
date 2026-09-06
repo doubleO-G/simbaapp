@@ -185,13 +185,26 @@ function Index() {
   const [partnerOpen, setPartnerOpen] = useState(false);
   const [partnerUnlocked, setPartnerUnlocked] = useState(false);
   const [confirmation, setConfirmation] = useState<null | { ref: string; type: "merch" | "partner"; amount: number; email: string }>(null);
+  const [bannerOpen, setBannerOpen] = useState(false);
 
   useEffect(() => {
     if (sessionStorage.getItem("swy_partner_ok") === "1") setPartnerUnlocked(true);
+    if (sessionStorage.getItem("swy_banner_dismissed") !== "1") setBannerOpen(true);
   }, []);
 
   return (
     <div className="min-h-screen">
+      {bannerOpen && (
+        <div className="relative z-50 bg-primary text-primary-foreground">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-center gap-3 text-center">
+            <p className="text-sm sm:text-base font-medium">
+              <span className="font-semibold">The Roar Is Shipping.</span> You caught the live recording — now wear it. All merch in stock, ready to ship.{" "}
+              <a href="#shop" className="underline font-semibold hover:opacity-80">Shop the merch →</a>
+            </p>
+            <button onClick={() => { sessionStorage.setItem("swy_banner_dismissed", "1"); setBannerOpen(false); }} aria-label="Dismiss announcement" className="absolute right-3 top-1/2 -translate-y-1/2 text-primary-foreground/80 hover:text-primary-foreground text-xl leading-none">×</button>
+          </div>
+        </div>
+      )}
       <Header cartCount={cart.count} onCart={() => setCartOpen(true)} onPartner={() => setPartnerOpen(true)} partnerUnlocked={partnerUnlocked} />
       <Hero />
       <EventInfo />
