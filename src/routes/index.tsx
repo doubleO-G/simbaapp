@@ -315,7 +315,9 @@ function EventInfo() {
         <div className="grid sm:grid-cols-2 gap-6">
           <div className="card-luxe p-8">
             <h3 className="text-2xl mb-3 text-primary">The Vision</h3>
-            <p className="text-muted-foreground">A live worship recording bringing together 1,500–2,000 souls at Pipeline, Embakasi. Every shirt sold, every partnership signed, brings us closer to capturing this moment for generations.</p>
+            <p className="text-muted-foreground">The live worship recording brought together 1,500–2,000 souls at Pipeline, Embakasi. The moment was captured. Now partners are helping carry this sound beyond the room and place it before generations.</p>
+            <p className="text-foreground font-semibold mt-3">Your partnership can take it further.</p>
+            <p className="text-primary uppercase tracking-[0.3em] text-xs mt-2">Partner the movement.</p>
           </div>
           <div className="card-luxe p-8">
             <h3 className="text-2xl mb-3 text-primary">How To Help</h3>
