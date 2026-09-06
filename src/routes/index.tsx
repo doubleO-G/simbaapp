@@ -490,7 +490,11 @@ function PartnersSection({ onPay }: { onPay: (tier: typeof TIERS[number], email:
         <div className="text-center mb-12">
           <p className="uppercase tracking-[0.3em] text-xs text-primary mb-3">Partner Portal</p>
           <h2 className="text-4xl sm:text-5xl">Stand With The <span className="text-gold-gradient">Vision</span></h2>
-          <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">Reach 1,500–2,000 engaged attendees. Choose a partnership level that fits your goals — every tier includes co-branding and visibility opportunities.</p>
+          <div className="text-muted-foreground mt-6 max-w-2xl mx-auto space-y-4">
+            <p className="leading-relaxed">The live worship recording brought together <span className="text-foreground font-semibold">1,500–2,000 souls</span> at Pipeline, Embakasi. The moment was captured. Now partners are helping carry this sound beyond the room and place it before generations.</p>
+            <p className="text-foreground font-semibold">Your partnership can take it further.</p>
+            <p className="uppercase tracking-[0.3em] text-xs text-primary">Partner the movement.</p>
+          </div>
         </div>
 
         {/* Venue showcase */}
